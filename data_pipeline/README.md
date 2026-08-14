@@ -1,82 +1,95 @@
 # Data Pipeline
 
-## Overview
+This is my Module 1 data pipeline project using books.toscrape.com.
 
-This module scrapes book data from books.toscrape.com, cleans the
-scraped data, converts book prices from GBP to INR, stores the data
-in a normalized SQLite database, and analyzes the database using
-SQL and pandas.
+I scraped book data from the website, cleaned it and stored it in SQLite database.
+
+## Files
+
+- book_pipeline.py
+- books.db
+- query_outputs.txt
+- README.md
+- requirements.txt
 
 ## Data Source
 
+I used:
+
 https://books.toscrape.com/
 
-The first five catalogue pages are scraped automatically using
-requests and BeautifulSoup.
+I scraped first 5 catalogue pages using requests and BeautifulSoup.
+
+Around 100 books are collected.
 
 ## Data Collected
 
-For each book the following information is collected:
+For every book I collected:
 
-- Title
-- Price
-- Star rating
-- Availability
-- Category
-
-At least 60 books are required. This implementation scrapes
-approximately 100 books from the first five catalogue pages.
+- title
+- price
+- rating
+- availability
+- category
 
 ## Data Cleaning
 
-Price:
-The £ symbol is removed and the value is converted to float.
-If a price cannot be parsed, the missing value is replaced with
-the median book price.
+For price I removed the £ symbol and converted it to float.
 
-Rating:
-Text ratings One, Two, Three, Four, and Five are converted to
-integer values 1 through 5.
-Rows with invalid ratings are removed.
+If any price could not be converted I used median price.
 
-Availability:
-Availability text containing "In stock" is converted to True.
-Other values are converted to False.
+Ratings like:
+
+One, Two, Three, Four, Five
+
+were converted into numbers 1 to 5.
+
+If rating was invalid that row was removed.
+
+For availability, books with "In stock" were converted to True and other values to False.
 
 ## Currency Conversion
 
-The project-defined fixed conversion rate is:
+I used fixed conversion rate given in the question:
 
 1 GBP = 105.50 INR
 
-price_inr is calculated using:
+INR price was calculated using:
 
 price_inr = price_gbp * 105.50
 
-No external currency API is required.
+No currency API was used.
 
-## Database Design
+## Database
 
-The SQLite database contains two normalized tables:
+I used SQLite database called:
 
-categories
+books.db
 
-- category_id - Primary Key
-- category_name - Unique category name
+I created 2 tables.
 
-books
+categories:
 
-- book_id - Primary Key
+- category_id
+- category_name
+
+books:
+
+- book_id
 - title
 - price_gbp
 - price_inr
 - rating
 - in_stock
-- category_id - Foreign Key referencing categories
+- category_id
+
+category_id in books is a foreign key connected to categories table.
 
 ## SQL Queries
 
-Five SQL queries demonstrate:
+I created 5 SQL queries.
+
+They include:
 
 - SELECT
 - WHERE
@@ -86,38 +99,27 @@ Five SQL queries demonstrate:
 - BETWEEN
 - JOIN
 
-Query results are displayed in the notebook.
+The query results are also saved in:
 
-## Pandas and SQL Comparison
+query_outputs.txt
 
-SQL query results are loaded using pd.read_sql().
+## Pandas
 
-The JOIN query is also reproduced using pandas pd.merge().
+I used pd.read_sql() to read SQL query results into pandas.
 
-The SQL and pandas results are compared to verify that they
-produce equivalent output.
+I also recreated the SQL JOIN using pd.merge().
 
-## Installation
+Then I compared SQL result and pandas result to check if both are same.
 
-Install the required libraries:
+## How to run
+
+I used VS Code for this project.
+
+First activate the virtual env.
+
+```powershell
+.\data_pipeline\.venv\Scripts\Activate.ps1
 
 pip install requests beautifulsoup4 pandas numpy
 
-SQLite support is included with Python.
-
-## Running
-
-Open data_pipeline.ipynb in Jupyter Notebook or Google Colab.
-
-Run all cells from top to bottom.
-
-The notebook will:
-
-1. Scrape the website.
-2. Clean the data.
-3. Convert GBP prices to INR.
-4. Create books.db.
-5. Create categories and books tables.
-6. Insert the cleaned data.
-7. Execute SQL queries.
-8. Compare SQL JOIN results with pandas merge results.
+run python book_pipeline.py
