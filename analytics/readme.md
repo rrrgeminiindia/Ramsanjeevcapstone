@@ -162,3 +162,18 @@ The final complete pipeline is saved as:
 best_titanic_pipeline.joblib
 
 I also loaded it again using joblib and checked that predictions are same.
+## Model Comparison
+
+| Model | Accuracy | Precision | Recall | F1 | AUC |
+|---|---:|---:|---:|---:|---:|
+| Logistic Regression | 0.8090 | 0.7833 | 0.6912 | 0.7344 | 0.8610 |
+| Decision Tree | 0.7640 | 0.7600 | 0.5588 | 0.6441 | 0.8374 |
+| Random Forest | 0.8202 | 0.7813 | 0.7353 | 0.7576 | 0.8179 |
+| Tuned Random Forest | 0.8258 | 0.8491 | 0.6618 | 0.7438 | 0.8372 |
+
+## Final Recommendation
+
+Logistic Regression had the highest AUC of 0.8610.
+Random Forest had the highest F1 among the original three models at 0.7576.
+The tuned Random Forest improved accuracy to 0.8258 but its AUC was still lower than Logistic Regression.
+I selected Logistic Regression as the final model because it gave the best overall AUC.
